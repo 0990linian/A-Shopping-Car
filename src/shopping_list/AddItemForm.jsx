@@ -1,35 +1,34 @@
 import React, {Component} from "react"
+import {connect} from "react-redux"
 import {withRouter} from "react-router-dom"
+import {SHOPPING_LIST_ADD_ITEM_ACTION} from "../common/Constants"
+import {checkInputIsPositiveNumber, checkInputIsString} from "../common/utils"
 
-class Form extends Component {
+class AddItemForm extends Component {
     constructor(props) {
         super(props)
         this.state = {
             item: "",
-            number: ""
+            value: ""
         }
-        this.form = [
-            {id: 1, shownText: "Fruit", stateKey: "item"},
-            {id: 2, shownText: "Number", stateKey: "number"}
-        ]
     }
 
-    handleChange = (e) => {
+    handleChange = e => {
         this.setState({
             [e.target.id]: e.target.value
         })
     }
 
-    handleSubmit = (e) => {
+    handleSubmit = e => {
         e.preventDefault()
+        if (checkInputIsPositiveNumber(this.state.value) && checkInputIsString(this.state.item)) {
+            this.props.addItem(this.state.item, parseInt(this.state.value))
+            this.props.history.push("/redirect")
+        }
         this.setState({
             item: "",
             number: ""
         })
-        if (this.props.onAddItem(this.state)) {
-            // Redirect the page to "/redirect"
-            this.props.history.push("/redirect")
-        }
     }
 
     render() {
@@ -39,11 +38,11 @@ class Form extends Component {
                 {/*onSubmit catches cases when user hits enter and click the submit button, only setting onClick event on submit button is not enough */}
                 {/*By default, the page refresh when a form is submitted*/}
                 <form onSubmit={this.handleSubmit}>
-                    {this.form.map(({id, shownText, stateKey}) =>
+                    {this.props.formFields.map(({id, shownText, stateKey, textType}) =>
                         <h4 key={id}>
                             {shownText}:
                             <input
-                                type="text"
+                                type={textType}
                                 id={stateKey}
                                 onChange={this.handleChange}
                                 value={this.state[stateKey]}
@@ -57,5 +56,24 @@ class Form extends Component {
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        formFields: state.shoppingListState.addItemFormFields
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        addItem: (item, value) => dispatch({
+            type: SHOPPING_LIST_ADD_ITEM_ACTION,
+            item,
+            value
+        })
+    }
+}
+
 // withRouter, the higher order component. So props contains history to allow the redirection.
-export default withRouter(Form)
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withRouter(AddItemForm))

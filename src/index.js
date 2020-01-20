@@ -1,13 +1,20 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import * as serviceWorker from './serviceWorker';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './index.css'
+import * as serviceWorker from './serviceWorker'
 // Use Bootstrap as CSS style
 import "bootstrap/dist/css/bootstrap.css"
-import ShoppingCar from "./ShoppingCar";
+import ShoppingCar from "./ShoppingCar"
+import {createStore} from "redux"
+import {Provider} from "react-redux"
+import rootReducer from "./rootReducer"
+
+const store = createStore(rootReducer)
 
 ReactDOM.render(
-    <ShoppingCar />,
+    <Provider store={store}>
+        <ShoppingCar/>
+    </Provider>,
     document.getElementById('root')
 );
 

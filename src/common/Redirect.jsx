@@ -1,5 +1,5 @@
 import React from "react"
-import {HOME_URL} from "../common/Constants";
+import {HOME_URL} from "./Constants";
 
 const Redirect = (props) => {
     setTimeout(

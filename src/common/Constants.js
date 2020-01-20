@@ -2,5 +2,16 @@ export const HOME_URL = "/"
 export const FORM_URL = "/form"
 export const POST_LIST_URL = "/posts"
 export const REDIRECT_URL = "/redirect"
-export const JSON_PLACEHOLDER_URL = "/https://jsonplaceholder.typicode.com"
+export const JSON_PLACEHOLDER_URL = "https://jsonplaceholder.typicode.com"
 export const ITEM_MAX_NUMBER = 5
+
+export const SHOPPING_LIST_INCREASE_ACTION = "SHOPPING_LIST_INCREASE"
+export const SHOPPING_LIST_DECREASE_ACTION = "SHOPPING_LIST_DECREASE"
+export const SHOPPING_LIST_DELETE_ACTION = "SHOPPING_LIST_DELETE"
+export const SHOPPING_LIST_RESET_ACTION = "SHOPPING_LIST_RESET"
+export const SHOPPING_LIST_ADD_RANDOM_ACTION = "SHOPPING_LIST_ADD_RANDOM"
+export const SHOPPING_LIST_ADD_ITEM_ACTION = "SHOPPING_LIST_ADD_ITEM"
+
+export const RECORD_FULL_POST_LIST = "RECORD_FULL_POST_LIST"
+export const RECORD_POST = "RECORD_POST"
+export const RECORD_POST_NUMBER_SHOWN = "RECORD_POST_NUMBER_SHOWN"
