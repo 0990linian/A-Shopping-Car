@@ -3,6 +3,7 @@ import {connect} from "react-redux"
 import {withRouter} from "react-router-dom"
 import {SHOPPING_LIST_ADD_ITEM_ACTION} from "../common/Constants"
 import {checkInputIsPositiveNumber, checkInputIsString} from "../common/utils"
+import {addItemFormFieldsSelector} from "./ShoppingListReducer"
 
 class AddItemForm extends Component {
     constructor(props) {
@@ -58,7 +59,7 @@ class AddItemForm extends Component {
 
 const mapStateToProps = state => {
     return {
-        formFields: state.shoppingListState.addItemFormFields
+        formFields: addItemFormFieldsSelector(state)
     }
 }
 

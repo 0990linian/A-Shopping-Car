@@ -1,7 +1,9 @@
 import React from "react"
 import {connect} from "react-redux"
 import {Link} from "react-router-dom"
-import {HOME_URL} from "./Constants"
+import {HOME_URL} from "../common/Constants"
+import {shoppingListActiveNumberSelector} from "../shopping_list/ShoppingListReducer"
+import {buttonPropsSelector} from "./NavBarReducer"
 
 const NavBar = props => {
     return (
@@ -27,8 +29,8 @@ const NavBar = props => {
 
 const mapStateToProps = state => {
     return {
-        activeNumbers: state.shoppingListState.shoppingList.filter(counter => counter.value !== 0).length,
-        buttonProps: state.navBarState.buttonProps
+        activeNumbers: shoppingListActiveNumberSelector(state),
+        buttonProps: buttonPropsSelector(state)
     }
 }
 

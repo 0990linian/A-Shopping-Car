@@ -6,6 +6,7 @@ import {
     ITEM_MAX_NUMBER
 } from "../common/Constants"
 import {connect} from "react-redux"
+import {shoppingListItemSelector} from "./ShoppingListReducer"
 
 class ShoppingItem extends Component {
     decideCount = () => {
@@ -67,7 +68,7 @@ class ShoppingItem extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        item: state.shoppingListState.shoppingList.find(item => item.id === ownProps.id)
+        item: shoppingListItemSelector(state, ownProps)
     }
 }
 

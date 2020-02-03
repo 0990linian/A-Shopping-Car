@@ -3,10 +3,28 @@ import {
     RECORD_POST,
     RECORD_POST_NUMBER_SHOWN
 } from "../common/Constants"
+import {createSelector} from "reselect"
 
 const initialState = {
     postNumShown: 10
 }
+
+export const postStateSelector = state => state.postState
+
+export const postListSelector = createSelector(
+    postStateSelector,
+    postState => postState.postList
+)
+
+export const postNumShownSelector = createSelector(
+    postStateSelector,
+    postState => postState.postNumShown
+)
+
+export const postSelector = createSelector(
+    postStateSelector,
+    postState => postState.post
+)
 
 const postReducer = (state = initialState, action) => {
     switch (action.type) {

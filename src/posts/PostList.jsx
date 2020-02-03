@@ -9,6 +9,7 @@ import {
     RECORD_FULL_POST_LIST,
     RECORD_POST_NUMBER_SHOWN
 } from "../common/Constants"
+import {postListSelector, postNumShownSelector} from "./PostReducer"
 
 class PostList extends Component {
     constructor(props) {
@@ -117,8 +118,8 @@ class PostList extends Component {
 
 const mapStateToProps = state => {
     return {
-        postList: state.postState.postList,
-        postNumShown: state.postState.postNumShown
+        postList: postListSelector(state),
+        postNumShown: postNumShownSelector(state)
     }
 }
 

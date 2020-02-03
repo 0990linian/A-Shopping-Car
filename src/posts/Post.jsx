@@ -7,6 +7,7 @@ import {
     POST_LIST_URL,
     RECORD_POST
 } from "../common/Constants"
+import {postSelector} from "./PostReducer"
 
 class Post extends Component {
     componentDidMount() {
@@ -43,7 +44,7 @@ class Post extends Component {
 
 const mapStateToProps = state => {
     return {
-        post: state.postState.post
+        post: postSelector(state)
     }
 }
 

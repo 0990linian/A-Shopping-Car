@@ -5,6 +5,7 @@ import {
     SHOPPING_LIST_ADD_RANDOM_ACTION,
     SHOPPING_LIST_RESET_ACTION
 } from "../common/Constants"
+import {shoppingListSelector} from "./ShoppingListReducer"
 
 const ShoppingList = props => {
     return (
@@ -37,9 +38,9 @@ const ShoppingList = props => {
     )
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {
-        shoppingList: state.shoppingListState.shoppingList
+        shoppingList: shoppingListSelector(state)
     }
 }
 

@@ -1,5 +1,5 @@
 import React from "react"
-import NavBar from "./common/NavBar"
+import NavBar from "./navBar/NavBar"
 import ShoppingList from "./shopping_list/ShoppingList"
 import AddItemForm from "./shopping_list/AddItemForm"
 import Redirect from "./common/Redirect"
