@@ -1,12 +1,12 @@
 import {
     SHOPPING_LIST_ADD_ITEM_ACTION,
-    SHOPPING_LIST_ADD_RANDOM_ACTION,
     SHOPPING_LIST_DECREASE_ACTION,
     SHOPPING_LIST_DELETE_ACTION,
     SHOPPING_LIST_INCREASE_ACTION,
     SHOPPING_LIST_RESET_ACTION
 } from "../common/Constants"
 import {createSelector} from "reselect"
+import {createAction, handleActions} from "redux-actions";
 
 const initialState = {
     shoppingList: [
@@ -14,10 +14,6 @@ const initialState = {
         {id: 2, item: "Banana", value: 0},
         {id: 3, item: "Orange", value: 0},
         {id: 4, item: "Grapes", value: 0}
-    ],
-    addItemFormFields: [
-        {id: 1, shownText: "Item", stateKey: "item", textType: "text"},
-        {id: 2, shownText: "Number", stateKey: "value", textType: "number"}
     ]
 }
 
@@ -26,11 +22,6 @@ export const shoppingListStateSelector = state => state.shoppingListState
 export const shoppingListSelector = createSelector(
     shoppingListStateSelector,
     shoppingListState => shoppingListState.shoppingList
-)
-
-export const addItemFormFieldsSelector = createSelector(
-    shoppingListStateSelector,
-    shoppingListState => shoppingListState.addItemFormFields
 )
 
 export const getShoppingItemId = (state, ownProps) => ownProps.id
@@ -46,17 +37,16 @@ export const shoppingListActiveNumberSelector = createSelector(
     shoppingList => shoppingList.filter(counter => counter.value !== 0).length
 )
 
-const shoppingListItemValueIncreaseDecrease = (state, action, increase) => {
-    let newShoppingList = [...state.shoppingList],
-        itemIndex = newShoppingList.findIndex(item => item.id === action.id),
-        itemToChange = {...newShoppingList[itemIndex]}
+const shoppingListItemValueIncreaseDecrease = (shoppingList, itemId, increase) => {
+    let itemIndex = shoppingList.findIndex(item => item.id === itemId),
+        itemToChange = {...shoppingList[itemIndex]}
     if (increase) {
         itemToChange.value += 1
     } else if (itemToChange.value > 0) {
         itemToChange.value -= 1
     }
-    newShoppingList.splice(itemIndex, 1, itemToChange)
-    return newShoppingList
+    shoppingList.splice(itemIndex, 1, itemToChange)
+    return shoppingList
 }
 
 const findShoppingListValidId = (state) => {
@@ -64,28 +54,58 @@ const findShoppingListValidId = (state) => {
     return length ? state.shoppingList[length - 1].id + 1 : 0
 }
 
-const shoppingListReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case SHOPPING_LIST_INCREASE_ACTION: {
-            return {
-                ...state,
-                shoppingList: shoppingListItemValueIncreaseDecrease(state, action, true)
-            }
-        }
-        case SHOPPING_LIST_DECREASE_ACTION: {
-            return {
-                ...state,
-                shoppingList: shoppingListItemValueIncreaseDecrease(state, action, false)
-            }
-        }
-        case SHOPPING_LIST_DELETE_ACTION: {
-            const shoppingListOther = state.shoppingList.filter(item => item.id !== action.id)
-            return {
-                ...state,
-                shoppingList: shoppingListOther
-            }
-        }
-        case SHOPPING_LIST_RESET_ACTION: {
+export const shoppingListItemIncreaseValue = createAction(
+    SHOPPING_LIST_INCREASE_ACTION,
+    () => {
+    },
+    itemId => ({itemId})
+)
+
+export const shoppingListItemDecreaseValue = createAction(
+    SHOPPING_LIST_DECREASE_ACTION,
+    () => {
+    },
+    itemId => ({itemId})
+)
+
+export const shoppingListDeleteItem = createAction(
+    SHOPPING_LIST_DELETE_ACTION,
+    () => {
+    },
+    itemId => ({itemId})
+)
+
+export const shoppingListReset = createAction(SHOPPING_LIST_RESET_ACTION)
+
+export const shoppingListAddRandomItem = createAction(
+    SHOPPING_LIST_ADD_ITEM_ACTION,
+    () => {
+    },
+    () => ({item: "Random", value: 0})
+)
+
+export const shoppingListAddItem = createAction(
+    SHOPPING_LIST_ADD_ITEM_ACTION,
+    () => {
+    },
+    (item, value) => ({item, value})
+)
+
+const shoppingListReducer = handleActions(
+    {
+        [SHOPPING_LIST_INCREASE_ACTION]: (state, action) => ({
+            ...state,
+            shoppingList: shoppingListItemValueIncreaseDecrease([...state.shoppingList], action.meta.itemId, true)
+        }),
+        [SHOPPING_LIST_DECREASE_ACTION]: (state, action) => ({
+            ...state,
+            shoppingList: shoppingListItemValueIncreaseDecrease([...state.shoppingList], action.meta.itemId, false)
+        }),
+        [SHOPPING_LIST_DELETE_ACTION]: (state, action) => ({
+            ...state,
+            shoppingList: state.shoppingList.filter(item => item.id !== action.meta.itemId)
+        }),
+        [SHOPPING_LIST_RESET_ACTION]: state => {
             let oldShoppingList = [...state.shoppingList],
                 newShoppingList = []
             for (let item of oldShoppingList) {
@@ -96,27 +116,17 @@ const shoppingListReducer = (state = initialState, action) => {
                 ...state,
                 shoppingList: newShoppingList
             }
-        }
-        case SHOPPING_LIST_ADD_RANDOM_ACTION: {
+        },
+        [SHOPPING_LIST_ADD_ITEM_ACTION]: (state, action) => {
             const validId = findShoppingListValidId(state)
-            const newItem = {id: validId, item: "Random", value: 0}
+            const newItem = {id: validId, item: action.meta.item, value: action.meta.value}
             return {
                 ...state,
                 shoppingList: [...state.shoppingList, newItem]
             }
         }
-        case SHOPPING_LIST_ADD_ITEM_ACTION: {
-            const validId = findShoppingListValidId(state)
-            const newItem = {id: validId, item: action.item, value: action.value}
-            return {
-                ...state,
-                shoppingList: [...state.shoppingList, newItem]
-            }
-        }
-        default: {
-            return state
-        }
-    }
-}
+    },
+    initialState
+)
 
 export default shoppingListReducer

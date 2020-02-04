@@ -1,12 +1,12 @@
 import React, {Component} from "react"
-import {
-    SHOPPING_LIST_DECREASE_ACTION,
-    SHOPPING_LIST_DELETE_ACTION,
-    SHOPPING_LIST_INCREASE_ACTION,
-    ITEM_MAX_NUMBER
-} from "../common/Constants"
+import {ITEM_MAX_NUMBER} from "../common/Constants"
 import {connect} from "react-redux"
-import {shoppingListItemSelector} from "./ShoppingListReducer"
+import {
+    shoppingListDeleteItem,
+    shoppingListItemDecreaseValue,
+    shoppingListItemIncreaseValue,
+    shoppingListItemSelector
+} from "./ShoppingListReducer"
 
 class ShoppingItem extends Component {
     decideCount = () => {
@@ -74,9 +74,9 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onIncrease: id => dispatch({type: SHOPPING_LIST_INCREASE_ACTION, id}),
-        onDecrease: id => dispatch({type: SHOPPING_LIST_DECREASE_ACTION, id}),
-        onDelete: id => dispatch({type: SHOPPING_LIST_DELETE_ACTION, id})
+        onIncrease: id => dispatch(shoppingListItemIncreaseValue(id)),
+        onDecrease: id => dispatch(shoppingListItemDecreaseValue(id)),
+        onDelete: id => dispatch(shoppingListDeleteItem(id))
     }
 }
 

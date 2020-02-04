@@ -1,11 +1,7 @@
 import React from "react"
 import ShoppingItem from "./ShoppingItem"
 import {connect} from "react-redux"
-import {
-    SHOPPING_LIST_ADD_RANDOM_ACTION,
-    SHOPPING_LIST_RESET_ACTION
-} from "../common/Constants"
-import {shoppingListSelector} from "./ShoppingListReducer"
+import {shoppingListAddRandomItem, shoppingListReset, shoppingListSelector} from "./ShoppingListReducer"
 
 const ShoppingList = props => {
     return (
@@ -46,8 +42,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onReset: () => dispatch({type: SHOPPING_LIST_RESET_ACTION}),
-        onAddRandom: () => dispatch({type: SHOPPING_LIST_ADD_RANDOM_ACTION})
+        onReset: () => dispatch(shoppingListReset()),
+        onAddRandom: () => dispatch(shoppingListAddRandomItem())
     }
 }
 

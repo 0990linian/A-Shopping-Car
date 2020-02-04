@@ -4,6 +4,7 @@ import {
     RECORD_POST_NUMBER_SHOWN
 } from "../common/Constants"
 import {createSelector} from "reselect"
+import {createAction, handleActions} from "redux-actions";
 
 const initialState = {
     postNumShown: 10
@@ -26,30 +27,40 @@ export const postSelector = createSelector(
     postState => postState.post
 )
 
-const postReducer = (state = initialState, action) => {
-    switch (action.type) {
-        case RECORD_FULL_POST_LIST: {
-            return {
-                ...state,
-                postList: action.postList
-            }
-        }
-        case RECORD_POST: {
-            return {
-                ...state,
-                post: action.post
-            }
-        }
-        case RECORD_POST_NUMBER_SHOWN: {
-            return {
-                ...state,
-                postNumShown: action.num
-            }
-        }
-        default: {
-            return state
-        }
-    }
-}
+export const recordFullPostList = createAction(
+    RECORD_FULL_POST_LIST,
+    () => {},
+    postList => ({postList})
+)
+
+export const recordSinglePost = createAction(
+    RECORD_POST,
+    () => {},
+    post => ({post})
+)
+
+export const recordNumberOfPostsShown = createAction(
+    RECORD_POST_NUMBER_SHOWN,
+    () => {},
+    numOfPostsShown => ({numOfPostsShown})
+)
+
+const postReducer = handleActions(
+    {
+        [RECORD_FULL_POST_LIST]: (state, action) => ({
+            ...state,
+            postList: action.meta.postList
+        }),
+        [RECORD_POST]: (state, action) => ({
+            ...state,
+            post: action.meta.post
+        }),
+        [RECORD_POST_NUMBER_SHOWN]: (state, action) => ({
+            ...state,
+            postNumShown: action.meta.numOfPostsShown
+        })
+    },
+    initialState
+)
 
 export default postReducer

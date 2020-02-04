@@ -5,11 +5,9 @@ import {Link} from "react-router-dom"
 import {getRandomTextColor} from "../common/utils"
 import {
     JSON_PLACEHOLDER_URL,
-    POST_LIST_URL,
-    RECORD_FULL_POST_LIST,
-    RECORD_POST_NUMBER_SHOWN
+    POST_LIST_URL
 } from "../common/Constants"
-import {postListSelector, postNumShownSelector} from "./PostReducer"
+import {postListSelector, postNumShownSelector, recordFullPostList, recordNumberOfPostsShown} from "./PostReducer"
 
 class PostList extends Component {
     constructor(props) {
@@ -125,14 +123,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        recordFullPostList: postList => dispatch({
-            type: RECORD_FULL_POST_LIST,
-            postList
-        }),
-        recordPostNumShown: num => dispatch({
-            type: RECORD_POST_NUMBER_SHOWN,
-            num
-        })
+        recordFullPostList: postList => dispatch(recordFullPostList(postList)),
+        recordPostNumShown: num => dispatch(recordNumberOfPostsShown(num))
     }
 }
 

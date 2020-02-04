@@ -1,5 +1,6 @@
 import {FORM_URL, POST_LIST_URL} from "../common/Constants"
 import {createSelector} from "reselect"
+import {handleActions} from "redux-actions";
 
 const initialState = {
     buttonProps: [
@@ -15,8 +16,9 @@ export const buttonPropsSelector = createSelector(
     navBarState => navBarState.buttonProps
 )
 
-const navBarReducer = (state = initialState) => {
-    return state
-}
+const navBarReducer = handleActions(
+    {},
+    initialState
+)
 
 export default navBarReducer

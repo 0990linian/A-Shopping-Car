@@ -4,10 +4,9 @@ import axios from "axios"
 import {getRandomTextColor} from "../common/utils"
 import {
     JSON_PLACEHOLDER_URL,
-    POST_LIST_URL,
-    RECORD_POST
+    POST_LIST_URL
 } from "../common/Constants"
-import {postSelector} from "./PostReducer"
+import {postSelector, recordSinglePost} from "./PostReducer"
 
 class Post extends Component {
     componentDidMount() {
@@ -50,7 +49,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        recordPost: post => dispatch({type: RECORD_POST, post})
+        recordPost: post => dispatch(recordSinglePost(post))
     }
 }
 export default connect(
