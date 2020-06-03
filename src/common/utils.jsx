@@ -1,6 +1,21 @@
+import { useState } from "react"
+
 export const getRandomTextColor = () => {
     const colors = ["warning", "primary", "secondary", "success", "danger", "info", "dark", "muted"]
     return "text-" + colors[Math.floor(Math.random() * colors.length)]
+}
+
+export const useFormInput = (initialValue) => {
+    // setFunctions could also take function as argument, eg, setInput(prevState => prevState + 1), then input will be set to 1.
+    const [input, setInput] = useState(initialValue);
+    const handleChange = e => {
+        setInput(e.target.value)
+    }
+    return {
+        input,
+        setInput,
+        handleChange
+    }
 }
 
 export const checkInputIsPositiveNumber = (input) => {

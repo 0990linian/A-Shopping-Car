@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useEffect} from "react"
 import NavBar from "./navBar/NavBar"
 import ShoppingList from "./shopping_list/ShoppingList"
 import AddItemForm from "./shopping_list/AddItemForm"
@@ -9,6 +9,10 @@ import {BrowserRouter, Route, Switch} from "react-router-dom"
 import {FORM_URL, HOME_URL, POST_LIST_URL, REDIRECT_URL} from "./common/Constants"
 
 const ShoppingCar = () => {
+    useEffect(() => {
+        document.title = "Nian's Awesome APP"
+    });
+
     return (
         <BrowserRouter>
             <div>
@@ -36,6 +40,7 @@ const ShoppingCar = () => {
                         component={PostList}
                     />
                     <Route
+                        // postId is passed into component as props.match.params.postId
                         path={POST_LIST_URL + "/:postId"}
                         component={Post}
                     />

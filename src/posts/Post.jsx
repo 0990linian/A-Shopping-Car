@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, {useEffect} from "react"
 import {connect} from "react-redux"
 import axios from "axios"
 import {getRandomTextColor} from "../common/utils"
@@ -7,39 +7,6 @@ import {
     POST_LIST_URL
 } from "../common/Constants"
 import {postSelector, recordSinglePost} from "./PostReducer"
-
-class Post extends Component {
-    componentDidMount() {
-        axios.get(JSON_PLACEHOLDER_URL + POST_LIST_URL + "/" + this.props.match.params.postId)
-            .then(response => this.props.recordPost(response.data))
-    }
-
-    createPost = () => {
-        return this.props.post ? (
-            <div className="container">
-                <br/>
-                <h5 className={getRandomTextColor()}>
-                    {this.props.post.title}
-                </h5>
-                <p className={getRandomTextColor()}>
-                    {this.props.post.body}
-                </p>
-            </div>
-        ) : (
-            <h2 className="container text-danger">
-                <br/>
-                Loading post ID: {this.props.match.params.postId}
-            </h2>
-        )
-    }
-
-    render() {
-        return (
-            this.createPost()
-        )
-    }
-
-}
 
 const mapStateToProps = state => {
     return {
@@ -52,6 +19,38 @@ const mapDispatchToProps = dispatch => {
         recordPost: post => dispatch(recordSinglePost(post))
     }
 }
+
+const Post = ({
+                  post,
+                  recordPost,
+                  match,
+              }) => {
+    useEffect(() => {
+        axios.get(JSON_PLACEHOLDER_URL + POST_LIST_URL + "/" + match.params.postId)
+            .then(response => recordPost(response.data))
+        return () => {
+            recordPost("")
+        };
+    }, [recordPost, match]);
+
+    return post ? (
+        <div className="container">
+            <br/>
+            <h5 className={getRandomTextColor()}>
+                {post.title}
+            </h5>
+            <p className={getRandomTextColor()}>
+                {post.body}
+            </p>
+        </div>
+    ) : (
+        <h2 className="container text-danger">
+            <br/>
+            Loading post ID: {match.params.postId}
+        </h2>
+    )
+}
+
 export default connect(
     mapStateToProps,
     mapDispatchToProps

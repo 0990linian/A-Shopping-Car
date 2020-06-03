@@ -7,7 +7,7 @@ import {createSelector} from "reselect"
 import {createAction, handleActions} from "redux-actions";
 
 const initialState = {
-    postNumShown: 10
+    postNum: 10
 }
 
 export const postStateSelector = state => state.postState
@@ -17,9 +17,9 @@ export const postListSelector = createSelector(
     postState => postState.postList
 )
 
-export const postNumShownSelector = createSelector(
+export const postNumSelector = createSelector(
     postStateSelector,
-    postState => postState.postNumShown
+    postState => postState.postNum
 )
 
 export const postSelector = createSelector(
@@ -57,7 +57,7 @@ const postReducer = handleActions(
         }),
         [RECORD_POST_NUMBER_SHOWN]: (state, action) => ({
             ...state,
-            postNumShown: action.meta.numOfPostsShown
+            postNum: action.meta.numOfPostsShown
         })
     },
     initialState

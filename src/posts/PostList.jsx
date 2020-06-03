@@ -1,4 +1,4 @@
-import React, {Component} from "react"
+import React, {useEffect} from "react"
 import {connect} from "react-redux"
 import axios from "axios"
 import {Link} from "react-router-dom"
@@ -7,25 +7,41 @@ import {
     JSON_PLACEHOLDER_URL,
     POST_LIST_URL
 } from "../common/Constants"
-import {postListSelector, postNumShownSelector, recordFullPostList, recordNumberOfPostsShown} from "./PostReducer"
+import {postListSelector, postNumSelector, recordFullPostList} from "./PostReducer"
+import PostNumInput from "./PostNumInput";
 
-class PostList extends Component {
-    constructor(props) {
-        super(props)
-        this.postNumShown = this.props.postNumShown
+const mapStateToProps = state => {
+    return {
+        postList: postListSelector(state),
+        postNum: postNumSelector(state)
     }
+}
 
-    componentDidMount() {
+const mapDispatchToProps = dispatch => {
+    return {
+        recordFullPostList: postList => dispatch(recordFullPostList(postList))
+    }
+}
+
+const PostList = ({
+                      postList,
+                      postNum,
+                      recordFullPostList
+                  }) => {
+    useEffect(() => {
         axios.get(JSON_PLACEHOLDER_URL + "/posts")
             .then(response => {
-                this.props.recordFullPostList(response.data)
+                recordFullPostList(response.data)
             })
-    }
+        return () => {
+            recordFullPostList([])
+        };
+    }, [recordFullPostList]);
 
-    createPosts = num => {
-        return this.props.postList ? (
+    const createPosts = num => {
+        return postList ? (
                 parseInt(num) > 0 ? (
-                    this.selectRandomPosts(num).map(post => {
+                    selectRandomPosts(num).map(post => {
                         return (
                             <div key={post.id}>
                                 <br/>
@@ -55,8 +71,8 @@ class PostList extends Component {
             )
     }
 
-    selectRandomPosts = num => {
-        const postListLength = this.props.postList.length
+    const selectRandomPosts = num => {
+        const postListLength = postList.length
         num = Math.min(num, postListLength)
         let i = 0,
             randomNumList = [],
@@ -74,58 +90,17 @@ class PostList extends Component {
             i++
         }
         for (const randomNum of randomNumList) {
-            randomPostList.push(this.props.postList[randomNum])
+            randomPostList.push(postList[randomNum])
         }
         return randomPostList
     }
 
-    handleSubmitPostNumInput = e => {
-        e.preventDefault()
-        this.props.recordPostNumShown(this.postNumShown)
-    }
-
-    handleChangePostNumInput = e => {
-        this.postNumShown = e.target.value
-    }
-
-    createPostNumberInputField = () => {
-        return (
-            <form onSubmit={this.handleSubmitPostNumInput}>
-                <h3>
-                    <br/>
-                    Number of posts shown:
-                    <input
-                        type="number"
-                        onChange={this.handleChangePostNumInput}
-                    />
-                </h3>
-            </form>
-        )
-
-    }
-
-    render() {
-        return (
-            <div className="container">
-                {this.createPostNumberInputField()}
-                {this.createPosts(this.props.postNumShown)}
-            </div>
-        )
-    }
-}
-
-const mapStateToProps = state => {
-    return {
-        postList: postListSelector(state),
-        postNumShown: postNumShownSelector(state)
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        recordFullPostList: postList => dispatch(recordFullPostList(postList)),
-        recordPostNumShown: num => dispatch(recordNumberOfPostsShown(num))
-    }
+    return (
+        <div className="container">
+            <PostNumInput />
+            {createPosts(postNum)}
+        </div>
+    )
 }
 
 export default connect(

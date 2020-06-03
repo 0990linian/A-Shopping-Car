@@ -1,4 +1,4 @@
-import React, {Component} from "react"
+import React from "react"
 import {ITEM_MAX_NUMBER} from "../common/Constants"
 import {connect} from "react-redux"
 import {
@@ -7,64 +7,6 @@ import {
     shoppingListItemIncreaseValue,
     shoppingListItemSelector
 } from "./ShoppingListReducer"
-
-class ShoppingItem extends Component {
-    decideCount = () => {
-        return this.props.item.value === 0 ? "Zero" : this.props.item.value
-    }
-
-    badgeColor = () => {
-        let style = "badge m-3 ml-4 badge-"
-        style += this.props.item.value === 0 ? "warning" : "primary"
-        return style
-    }
-
-    warningColor = () => {
-        let style = "badge m-2 badge-"
-        style += this.props.item.value > ITEM_MAX_NUMBER ? "danger" : "light"
-        return style
-    }
-
-    warningOrNot = () => {
-        return this.props.item.value > ITEM_MAX_NUMBER ? "Max " + ITEM_MAX_NUMBER + "!" : ""
-    }
-
-    render() {
-        return (
-            <div>
-                <span className="badge badge-pill m-3 mr-5 badge-info">{this.props.item.item}</span>
-
-                <button
-                    type="button"
-                    onClick={() => this.props.onIncrease(this.props.id)}
-                    className="btn btn-secondary btn-sm m-2"
-                >
-                    Increase
-                </button>
-
-                <span className={this.badgeColor()}>{this.decideCount()}</span>
-
-                <button
-                    type="button"
-                    onClick={() => this.props.onDecrease(this.props.id)}
-                    className="btn btn-secondary btn-sm m-2"
-                >
-                    Decrease
-                </button>
-
-                <button
-                    type="button"
-                    onClick={() => this.props.onDelete(this.props.id)}
-                    className="btn btn-danger btn-sm m-2"
-                >
-                    Delete
-                </button>
-
-                <span className={this.warningColor()}>{this.warningOrNot()}</span>
-            </div>
-        )
-    }
-}
 
 const mapStateToProps = (state, ownProps) => {
     return {
@@ -78,6 +20,68 @@ const mapDispatchToProps = dispatch => {
         onDecrease: id => dispatch(shoppingListItemDecreaseValue(id)),
         onDelete: id => dispatch(shoppingListDeleteItem(id))
     }
+}
+
+const ShoppingItem = ({
+                          id,
+                          item,
+                          onIncrease,
+                          onDecrease,
+                          onDelete
+                      }) => {
+    const decideCount = () => {
+        return item.value === 0 ? "Zero" : item.value
+    }
+
+    const badgeColor = () => {
+        let style = "badge m-3 ml-4 badge-"
+        style += item.value === 0 ? "warning" : "primary"
+        return style
+    }
+
+    const warningColor = () => {
+        let style = "badge m-2 badge-"
+        style += item.value > ITEM_MAX_NUMBER ? "danger" : "light"
+        return style
+    }
+
+    const warningOrNot = () => {
+        return item.value > ITEM_MAX_NUMBER ? "Max " + ITEM_MAX_NUMBER + "!" : ""
+    }
+
+    return (
+        <div>
+            <span className="badge badge-pill m-3 mr-5 badge-info">{item.item}</span>
+
+            <button
+                type="button"
+                onClick={() => onIncrease(id)}
+                className="btn btn-secondary btn-sm m-2"
+            >
+                Increase
+            </button>
+
+            <span className={badgeColor()}>{decideCount()}</span>
+
+            <button
+                type="button"
+                onClick={() => onDecrease(id)}
+                className="btn btn-secondary btn-sm m-2"
+            >
+                Decrease
+            </button>
+
+            <button
+                type="button"
+                onClick={() => onDelete(id)}
+                className="btn btn-danger btn-sm m-2"
+            >
+                Delete
+            </button>
+
+            <span className={warningColor()}>{warningOrNot()}</span>
+        </div>
+    )
 }
 
 export default connect(

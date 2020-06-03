@@ -3,6 +3,19 @@ import ShoppingItem from "./ShoppingItem"
 import {connect} from "react-redux"
 import {shoppingListAddRandomItem, shoppingListReset, shoppingListSelector} from "./ShoppingListReducer"
 
+const mapStateToProps = state => {
+    return {
+        shoppingList: shoppingListSelector(state)
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onReset: () => dispatch(shoppingListReset()),
+        onAddRandom: () => dispatch(shoppingListAddRandomItem())
+    }
+}
+
 const ShoppingList = props => {
     return (
         <div className="container">
@@ -32,19 +45,6 @@ const ShoppingList = props => {
             }
         </div>
     )
-}
-
-const mapStateToProps = state => {
-    return {
-        shoppingList: shoppingListSelector(state)
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        onReset: () => dispatch(shoppingListReset()),
-        onAddRandom: () => dispatch(shoppingListAddRandomItem())
-    }
 }
 
 export default connect(

@@ -5,6 +5,13 @@ import {HOME_URL} from "../common/Constants"
 import {shoppingListActiveNumberSelector} from "../shopping_list/ShoppingListReducer"
 import {buttonPropsSelector} from "./NavBarReducer"
 
+const mapStateToProps = state => {
+    return {
+        activeNumbers: shoppingListActiveNumberSelector(state),
+        buttonProps: buttonPropsSelector(state)
+    }
+}
+
 const NavBar = props => {
     return (
         <div>
@@ -25,13 +32,6 @@ const NavBar = props => {
             </nav>
         </div>
     )
-}
-
-const mapStateToProps = state => {
-    return {
-        activeNumbers: shoppingListActiveNumberSelector(state),
-        buttonProps: buttonPropsSelector(state)
-    }
 }
 
 export default connect(
